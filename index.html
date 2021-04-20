@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>CIO PLUS</title>
+	<link rel="stylesheet" href="TemplateData/style.css">
+  </head>
+
+  <body>
+    <div id="gameContainer"></div>
+    <div id="loader">
+      <!--img class="logo" src="logo.png"-->
+      <div class="spinner"></div>
+      <div class="progress"><div class="full"></div></div>
+    </div>
+	  <!--div class="fullscreen" onclick="gameInstance.SetFullscreen(1)"></div-->
+  </body>
+
+  <script src="Build/UnityLoader.js"></script>
+  <script>
+    var gameInstance = UnityLoader.instantiate("gameContainer", "Build/WebGL.json", {
+      onProgress: UnityProgress
+    });
+    function UnityProgress(gameInstance, progress) {
+      if (!gameInstance.Module) {
+        return;
+      }
+      const loader = document.querySelector("#loader");
+      if (!gameInstance.progress) {
+        const progress = document.querySelector("#loader .progress");
+        progress.style.display = "block";
+        gameInstance.progress = progress.querySelector(".full");
+        loader.querySelector(".spinner").style.display = "none";
+      }
+      gameInstance.progress.style.transform = `scaleX(${progress})`;
+      if (progress === 1 && !gameInstance.removeTimeout) {
+        gameInstance.removeTimeout = setTimeout(function() {
+            loader.style.display = "none";
+        }, 2000);
+      }
+    }
+  </script>
+
+</html>
+
